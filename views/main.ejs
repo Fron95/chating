@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    hello world
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>채팅방</title>
+  </head>
+  <body>
+    <div>F12를 눌러서 CONSOLE 탭과 NETWORK 탭을 확인하세요..</div>
+    <button id="send" onclick="socket.send('ㅎㅇ') ">보내기</button>
+    <script>
+      const socket = new WebSocket("ws://localhost:3000");
+    </script>
+  </body>
 </html>

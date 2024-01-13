@@ -14,11 +14,11 @@ const fs = require('fs')
 
 
 
-console.log(process.env)
+
 // process.env.NODE_ENV = 'production'
 // app.use(morgan('dev'))
 app.set("view engine", "ejs");
-app.get('')
+app.set('port', process.env.PORT || 3000)
 app.use(express.static(path.join(__dirname,'/public')))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,7 +29,8 @@ app.use(session({
   secret : process.env.COOKIE_SECRET,
   cookie : {
     httpOnly : true,
-    secure : false,    
+    secure : false,
+    maxAge: 6 * 60 * 60 * 1000    
   }
 }))
 
@@ -54,5 +55,26 @@ app.use((err, req, res, next) => {
   res.render('error')
 })
 
-app.listen(3000)
-// app.set('port', process.env.PORT || 8005)
+
+
+
+
+
+
+WebSocket = require('ws')
+
+const server = app.listen(app.get('port'), () => {
+  console.log(`Express server listening on port ${app.get('port')}`);
+});
+// 서버를 사용하면 같은 포트를 사용하는 것도 가능하다.
+const socketServer = new WebSocket.Server({server})
+socketServer.on('connection', (ws, req) => {
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  console.log("새로운 클라이언트 접속", ip);
+
+  ws.on("message", (message) => {
+    console.log(message.toString());
+  });
+})
+
+
